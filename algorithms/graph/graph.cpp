@@ -4,24 +4,24 @@ using namespace std;
 #define int long long
 
 template<typename T>
-struct edge {
+struct Edge {
   int from, to;
   T cost;
 
-  edge(int to, T cost) : from(-1), to(to), cost(cost) {}
+  Edge(int to, T cost) : from(-1), to(to), cost(cost) {}
 
-  edge(int from, int to, T cost) : from(from), to(to), cost(cost) {}
+  Edge(int from, int to, T cost) : from(from), to(to), cost(cost) {}
 
-  bool operator<(const edge& e) const {    
+  bool operator<(const Edge& e) const {    
     return cost<e.cost;    
   }
-  bool operator>(const edge& e) const {
+  bool operator>(const Edge& e) const {
     return cost>e.cost;    
   }
 };
 
 template<typename T>
-using Edges = vector<edge<T> >;
+using Edges = vector<Edge<T> >;
 
 template<typename T>
 using WeightedGraph = vector<Edges<T> >;
