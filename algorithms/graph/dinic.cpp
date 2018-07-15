@@ -16,7 +16,8 @@ struct Dinic {
 
   int n;
   vector<vector<FlowEdge> > G;
-  vector<int> level, iter;
+  vector<int> level; // distance from s
+  vector<int> iter; // how far is it finished searching
 
   Dinic() {}
   Dinic(int sz) : n(sz), G(n), level(n), iter(n) {}
@@ -29,6 +30,7 @@ struct Dinic {
     G[to].push_back(FlowEdge(from, 0, G[from].size()-1));    
   }
   
+  // calc shortest distance from s  
   void bfs(int s) {
     fill(level.begin(), level.end(), -1);
     queue<int> Q;
@@ -45,7 +47,8 @@ struct Dinic {
       }
     }
   }
-  
+
+  // search extpath 
   T dfs(int v, int t, T f) {
     if ( v == t ) return f;
     for ( int &i = iter[v]; i < (int)G[v].size(); i++ ) {
