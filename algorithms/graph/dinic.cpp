@@ -3,13 +3,15 @@ using namespace std;
 
 #define int long long
 
+template<typename T>
 struct Dinic {
-  const int INF = 1<<28;
+  const T INF = 1<<28;
   
   struct FlowEdge {    
-    int to, cap, rev;
+    int to, rev;
+    T cap;    
     FlowEdge() {}
-    FlowEdge(int to, int cap, int rev) : to(to), cap(cap), rev(rev) {}
+    FlowEdge(int to, T cap, int rev) : to(to), cap(cap), rev(rev) {}
   };
 
   int n;
@@ -19,7 +21,7 @@ struct Dinic {
   Dinic() {}
   Dinic(int sz) : n(sz), G(n), level(n), iter(n) {}
   
-  void add_edge(int from, int to, int cap) {
+  void add_edge(int from, int to, T cap) {
     G[from].push_back(FlowEdge(to, cap, G[to].size()));    
     // undirected
     //G[to].push_back(FlowEdge(from, cap, G[from].size()-1));
@@ -44,12 +46,12 @@ struct Dinic {
     }
   }
   
-  int dfs(int v, int t, int f) {
+  T dfs(int v, int t, T f) {
     if ( v == t ) return f;
     for ( int &i = iter[v]; i < (int)G[v].size(); i++ ) {
       FlowEdge &e = G[v][i];
       if ( e.cap > 0 && level[v] < level[e.to] ) {
-	int d = dfs(e.to,t,min(f,e.cap));
+	T d = dfs(e.to,t,min(f,e.cap));
 	if ( d > 0 ) {
 	  e.cap -= d;
 	  G[e.to][e.rev].cap += d;
@@ -60,13 +62,13 @@ struct Dinic {
     return 0;
   }
   
-  int max_flow(int s, int t, int lim) {
-    int flow = 0;
+  T max_flow(int s, int t, int lim) {
+    T flow = 0;
     while ( 1 ) {
       bfs(s);
       if ( level[t] < 0 || lim == 0 ) return flow;
       fill(iter.begin(), iter.end(), 0);
-      int f;
+      T f;
       while ( (f=dfs(s, t, lim)) > 0 ) {	
 	flow += f;
 	lim -= f;
@@ -74,7 +76,7 @@ struct Dinic {
     }
   }
 
-  int max_flow(int s, int t){
+  T max_flow(int s, int t){
     return max_flow(s, t, INF);
   }
 
@@ -96,11 +98,13 @@ struct Dinic {
   }
 };
 
+
+
 signed main(){
   int V,E;
   cin >> V >> E;
   
-  Dinic dinic(V);
+  Dinic<int> dinic(V);  
   for ( int i = 0; i < E; i++ ) {
     int u, v, c;
     cin >> u >> v >> c;
