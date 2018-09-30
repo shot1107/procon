@@ -13,15 +13,14 @@ struct Combination {
     constructor : O(sz+log(mod))   
     make factorial table (fact) and inverse factorial table (invf)
   */
-  Combination() {}  
   Combination(int sz, int mod) : fact(sz+1), invf(sz+1), mod(mod) {
     fact[0] = 1;
     for ( int i = 1; i < (int)fact.size(); i++ ) {
-      fact[i] = fact[i-1]*i % mod;
+      fact[i] = fact[i-1]*i%mod;
     }
     invf[sz] = inv(fact[sz]);
     for ( int i = sz-1; i >= 0; i-- ) {
-      invf[i] = invf[i+1]*(i+1) % mod;
+      invf[i] = invf[i+1]*(i+1)%mod;
     }
   }
 
@@ -44,7 +43,7 @@ struct Combination {
   */
   int P(int n, int r) const {
     if ( r < 0 || n < r ) return (0);
-    return fact[n]*invf[n-r] % mod;    
+    return fact[n]*invf[n-r]%mod;    
   }
 
   /*
@@ -52,7 +51,7 @@ struct Combination {
   */
   int C(int n, int r) const {
     if ( r < 0 || n < r ) return (0);    
-    return fact[n]*invf[r]%mod * invf[n-r] % mod;    
+    return fact[n]*invf[r]%mod*invf[n-r]%mod;    
   }  
 
   /*
@@ -107,73 +106,14 @@ struct Combination {
       }
     }
     return part;    
-  }  
+  }
+
+  /*
+    TODO 
+    make built_part() that make only part[i][i]
+    https://twitter.com/kirika_comp/status/953482654787149824
+    http://d.hatena.ne.jp/DEGwer/20170829
+    http://mathworld.wolfram.com/BellNumber.html
+  }    
+  */
 };
-
-struct TwelvefoldWay {
-  int mod;
-  Combination comb;  
-  TwelvefoldWay(int sz, int mod) : comb(sz, mod), mod(mod) {}
-
-  int _1(int n, int k) {
-    return comb.pow(k, n);    
-  }
-
-  int _2(int n, int k) {
-    return comb.P(k, n);
-  }
-
-  int _3(int n, int k) {
-    return comb.fact[k]*comb.S(n, k)%mod;    
-  }
-
-  int _4(int n, int k) {
-    return comb.H(n, k);    
-  }
-
-  int _5(int n, int k) {
-    return comb.C(k, n);
-  }
-
-  int _6(int n, int k) {
-    return comb.C(n-1, k-1);
-  }
-
-  int _7(int n, int k) {
-    return comb.B(n, k);
-  }
-
-  int _8(int n, int k) {
-    if ( n > k ) return 0;
-    else return 1;
-  }
-
-  int _9(int n, int k) {
-    return comb.S(n, k);
-  }
-
-  int _10(int n, int k) {
-    return comb.built_part(n, k)[n][k];    
-  }
-
-  int _11(int n, int k) {
-    return _8(n, k);
-  }
-
-  int _12(int n, int k) {
-    if ( n < k ) return 0;    
-    return comb.built_part(n-k, k)[n-k][k];    
-  }
-};
-
-signed main() {
-  int n, k;
-  cin >> n >> k;
-  
-  int mod = 1e9+7;
-  TwelvefoldWay tw(2000, mod);
-
-  cout << tw._1(n, k) << endl;  
-  
-  return 0;
-}
