@@ -9,8 +9,8 @@ struct Edge {
   T cost;
 
   Edge(int to, T cost) : from(-1), to(to), cost(cost) {}
-
   Edge(int from, int to, T cost) : from(from), to(to), cost(cost) {}
+  Edge(int from, int to) : from(from), to(to), cost(1) {}  
 
   bool operator<(const Edge& e) const {    
     return cost<e.cost;    
@@ -31,3 +31,4 @@ using Tree = vector<Edges<T> >;
 
 template< typename T >
 using Matrix = vector<vector<T> >;
+
